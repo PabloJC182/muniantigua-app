@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-6xl text-center text-primary font-[causten] font-bold">Institutos Municipales</h1>
+    <h1 class="text-6xl text-center text-primary font-[causten] font-bold my-20">Institutos Municipales</h1>
   </div>
 </template>
 

@@ -1,7 +1,6 @@
 <template>
     <Header />
-    <YoutubeAPI />
-    <Footer />    
+    <YoutubeAPI />  
 </template>
 
 <script setup>

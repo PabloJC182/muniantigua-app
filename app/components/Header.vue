@@ -1,52 +1,62 @@
 <template>
-  <div :class="['flex flex-row justify-between items-center w-full px-4 py-3 md:py-5 md:px-10 z-20 degradado', isSticky ? 'sticky top-0' : 'absolute top-0']">
-    <div>
+  <UHeader
+    :toggle="{color:'info'}"
+    :ui="{
+      root:['degradado h-[10vh] md:h-[16vh] border-none z-50', !isSticky ? 'absolute w-full' : ''],
+      container:'max-w-full',
+      content:'bg-primary dark:bg-zinc-900'
+    }"
+  >
+
+    <!-- Menú Izquierdo -->
+    <template #left>
       <nuxt-link to="/">
-        <img :src="imagenLogo" alt="Logo" class="h-14 md:h-25">
+        <img :src="imagenLogo" alt="Logo" class="h-14 md:h-25" >
       </nuxt-link>
-    </div>
-    <div>
-      <UDropdownMenu
-        :items="items"
-        class="block md:hidden"
-      >
-        <!-- <UButton :icon="!isOpen ? 'i-lucide-menu' : 'i-lucide-x'" variant="ghost" color="info" @click="toggleMenu()" /> -->
-        <UButton icon="i-lucide-menu" variant="ghost" color="info" />
-      </UDropdownMenu>
-      <UNavigationMenu
-        content-orientation="vertical"
-        :items="items"
-        :ui="{linkLabel: 'text-white font-[causten] text-xl', childLinkLabel: 'font-[causten]', childLinkDescription: 'font-[causten]'}"
-        class="hidden md:block"
-      />
-    </div>
-    <div>
-      <ul class="flex flex-row items-center">
-        <li>
-          <img :src="imagenBuscar" alt="Buscador" class="h-6 md:h-8">
-        </li>
-        <li>
+    </template>
+
+    <!-- Menú Principal Desktop -->
+    <UNavigationMenu
+      content-orientation="vertical"
+      highlight
+      highlight-color="info"
+      :items="items"
+      :ui="{
+        linkLabel: 'text-white font-[causten] text-xl',
+        childLinkLabel: 'font-[causten]',
+        linkTrailingIcon: 'text-white'
+      }"
+    />
+
+    <!-- Menú Derecho -->
+    <template #right>
+      <div class="flex flex-row items-center gap-x-2 md:gap-x-3">
+        <div>
+          <img :src="imagenBuscar" alt="Buscador" class="h-6 md:h-8" >
+        </div>
+        <div>
           <UPopover
-            v-model:open="isOpen"
-            :ui="{content: 'bg-transparent'}"
+            v-model:open="isOpenLang"
+            :ui="{
+              content: 'bg-transparent'
+            }"
           >
-            <img :src="imagenIdiomas" alt="Idiomas" class="h-6 md:h-8 ml-2 md:ml-5 cursor-pointer">
+            <img :src="imagenIdiomas" alt="Idiomas" class="h-6 md:h-8 cursor-pointer">
             <template #content>
-              <Placeholder class="w-5 md:w-10 h-25 md:h-40 m-1 md:m-2 flex flex-col gap-1 md:gap-2 pt-1">
+              <div class="w-5 md:w-10 h-25 md:h-40 m-1 md:m-2 flex flex-col gap-1 md:gap-2 pt-1">
                 <img :src="imagenES" alt="Buscador" class="h-4 md:h-6 pr-1" @click="changeLang('es')">
                 <img :src="imagenUS" alt="Buscador" class="h-4 md:h-6 pr-1" @click="changeLang('en')">
                 <img :src="imagenFR" alt="Buscador" class="h-4 md:h-6 pr-1" @click="changeLang('fr')">
                 <img :src="imagenDE" alt="Buscador" class="h-4 md:h-6 pr-1" @click="changeLang('de')">
                 <img :src="imagenJP" alt="Buscador" class="h-4 md:h-6 pr-1" @click="changeLang('ja')">
-              </Placeholder>
+              </div>
             </template>
           </UPopover>
-          
-        </li>
-        <li>
-          <img :src="imagenLogin" alt="Login" class="h-6 md:h-8 ml-2 md:ml-5">
-        </li>
-        <li class="ml-0 md:ml-3">
+        </div>
+        <div>
+          <img :src="imagenLogin" alt="Login" class="h-6 md:h-8">
+        </div>
+        <div class="">
           <ClientOnly class="hover:cursor-pointer">
             <UButton
               :icon="colorStore.isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
@@ -56,10 +66,27 @@
               size="xl"
             />
           </ClientOnly>
-        </li>
-      </ul>
-    </div>
-  </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Menú Principal Móvil -->
+    <template #body>
+      <UNavigationMenu
+        :items="items"
+        orientation="vertical"
+        highlight
+        highlight-color="info"
+        class="-mx-2.5"
+        :ui="{
+          linkLabel: 'text-white font-[causten]',
+          childLinkLabel: 'font-[causten]',
+          linkTrailingIcon:'text-white'
+        }"
+      />
+    </template>
+
+  </UHeader>
 </template>
 
 <script setup>
@@ -75,36 +102,9 @@
   import imagenDE from '~/assets/img/navbar/de.svg'
   import imagenJP from '~/assets/img/navbar/jp.svg'
 
-  const isSticky = ref(false)
-  const isOpen = ref(false)
-  const language = ref('es')
+  const isOpenLang = ref(false)
   const colorStore = useColorModeStore()
-
-  const handleScroll = () => {
-    isSticky.value = window.scrollY > 0
-  }
-
-  onMounted(() => {
-    window.addEventListener('scroll', handleScroll)
-    isOpen.value = false
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll)
-  })
-
-  const { setLanguage } = useGoogleTranslate()
-
-  function changeLang(lang) {
-    //if(language.value == 'es'){ language.value = 'en' } else { language.value = 'es' }
-    //setLanguage(language.value)
-    setLanguage(lang)
-    isOpen.value = false
-  }
-
-  const toggleMenu = () => {
-    isOpen.value = !isOpen.value
-  }
+  const route = useRoute()
 
   const items = ref([
     {
@@ -244,7 +244,6 @@
         },
         {
           label: 'Concejo Municipal',
-          to: '/sesiones-consejo',
         },
         {
           label: 'Datos Abiertos',
@@ -265,13 +264,37 @@
       to: '/cultural',
     },
   ])
+
+  onMounted(() => {
+    isOpenLang.value = false
+  })
+
+  const { setLanguage } = useGoogleTranslate()
+
+  function changeLang(lang) {
+    setLanguage(lang)
+    isOpenLang.value = false
+  }
+
+  const isSticky = ref(false)
+  const handleScroll = () => {
+    isSticky.value = window.scrollY > 0
+  }
+
+  onMounted(() => {
+    window.addEventListener('scroll', handleScroll)
+    isOpenLang.value = false
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll)
+  })
+
 </script>
 
-<style scoped>
-
+<style>
 .degradado {
   background: linear-gradient(to bottom,  rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.35) 56%,rgba(0,0,0,0) 100%);
   backdrop-filter: blur(8px);
 }
-
 </style>
