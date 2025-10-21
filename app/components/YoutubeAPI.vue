@@ -1,9 +1,7 @@
 <template>
-  <Header />
-
   <div class="bg-white dark:bg-zinc-900 px-4 sm:px-6 lg:px-8 py-10">
     <div class="contenedor flex flex-col lg:flex-row gap-10 justify-center items-start" style="margin-top: 7%;">
-      <!-- FAVORITOS (carrusel) -->
+      <!-- Favoritos -->
       <div class="flex-1 w-full">
         <h2 class="text-2xl font-bold mb-6 text-center lg:text-left">Mis videos favoritos</h2>
 
@@ -158,8 +156,6 @@
       </div>
     </div>
   </div>
-
-  <Footer />
 </template>
 
 <script setup>
