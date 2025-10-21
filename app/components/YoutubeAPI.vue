@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <!-- PANEL CALENDARIO + FILTRO -->
+      <!-- Filtro Calendario -->
       <div class="w-full lg:w-80 flex justify-center lg:justify-start">
         <UCollapsible :unmount-on-hide="true" class="w-full">
           <UButton
@@ -141,7 +141,7 @@
         </div>
       </UCarousel>
 
-      <!-- MENSAJE CUANDO HAY FILTRO Y NO HAY RESULTADOS -->
+      <!-- MENSAJE DEFAULT -->
       <div v-if="fechaSeleccionada && videosFiltrados.length === 0" class="text-center py-8 text-gray-500 dark:text-gray-400">
         <UIcon name="i-heroicons-video-camera" class="w-12 h-12 mx-auto mb-4 opacity-50" />
         <p class="text-lg">No hay videos con "{{ displayRangeTextShort }}"</p>
@@ -163,24 +163,23 @@ import { ref, onMounted, computed } from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
-/* CONFIG */
-const API_KEY = 'AIzaSyA55uPtx2GjqEDXI_Q5Tb1Bub5sIRbX6kM' // verifica restricciones en Google Cloud Console
-const PLAYLIST_ID = 'PL3QddupNykEEVwN8xuFGWr7U1n4St8y_w'
-const MAX_RESULTS = 50
-const CACHE_KEY = 'playlistVideos_v2'
-const CACHE_TIME_KEY = 'playlistVideosTime_v2'
+/* VARIABLES BÁSICAS */
+const API_KEY = 'AIzaSyA55uPtx2GjqEDXI_Q5Tb1Bub5sIRbX6kM' // Key para que funcione la API
+const PLAYLIST_ID = 'PL3QddupNykEEVwN8xuFGWr7U1n4St8y_w' // ID de la playlist a consultar
+const MAX_RESULTS = 50 // máximo permitido por la API es 50
+const CACHE_KEY = 'playlistVideos_v2' // clave para localStorage
+const CACHE_TIME_KEY = 'playlistVideosTime_v2' // clave para tiempo de cache
 const CACHE_TTL = 12 * 60 * 60 * 1000 // 12h
 
-/* REACTIVES */
-const videos = ref([])
-const videosFavs = ref([])
-const selectedRange = ref({ start: null, end: null })
-const displaySelectionApplied = ref(false)
-const searchQuery = ref('')
-const loading = ref(false)
-const errorMessage = ref('')
+/* VARIABLES REACTIVAS */
+const videos = ref([]) // lista completa de videos mapeados
+const videosFavs = ref([]) // lista de videos favoritos
+const selectedRange = ref({ start: null, end: null }) // rango seleccionado en el calendario
+const displaySelectionApplied = ref(false) // si el usuario aplicó el filtro
+const loading = ref(false) // estado de carga
+const errorMessage = ref('') // mensaje de error
 
-/* MESES */
+// MESES 
 const monthNames = [
   'enero','febrero','marzo','abril','mayo','junio',
   'julio','agosto','septiembre','octubre','noviembre','diciembre'
