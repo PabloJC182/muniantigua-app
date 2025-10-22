@@ -4,7 +4,6 @@
       <!-- Favoritos -->
       <div class="flex-1 w-full">
         <h2 class="text-2xl font-bold mb-6 text-center lg:text-left">Mis videos favoritos</h2>
-
         <div v-if="videosFavs.length > 0" class="relative">
           <UCarousel
             v-slot="{ item }"
@@ -13,7 +12,7 @@
             loop
             arrows
             class="w-full"
-          >
+            >
             <div class="flex flex-col items-center h-full px-2 pb-4">
               <iframe
                 v-if="item.videoId"
@@ -36,14 +35,12 @@
             </div>
           </UCarousel>
         </div>
-
         <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
           <UIcon name="line-md:star-alt-twotone" class="w-12 h-12 mx-auto mb-4 opacity-50" />
           <p class="text-lg">No tienes videos favoritos aún</p>
           <p class="text-sm mt-2">Agrega videos desde la sección de abajo</p>
         </div>
       </div>
-
       <!-- Filtro Calendario -->
       <div class="w-full lg:w-80 flex justify-center lg:justify-start">
         <UCollapsible :unmount-on-hide="true" class="w-full">
@@ -62,7 +59,6 @@
               :fixed-weeks="false"
               range
             />
-
             <div v-if="selectedRange && selectedRange.start" class="mt-4 text-lg text-center">
               <p class="font-semibold">Rango de Búsqueda:</p>
               <p class="text-sm text-gray-600 dark:text-gray-400" v-if="selectedRange.start && selectedRange.end">
@@ -71,11 +67,6 @@
               <p class="text-sm text-gray-600 dark:text-gray-400" v-else-if="selectedRange.start">
                 {{ displaySingleDateText }}
               </p>
-
-              <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">
-                Buscando en títulos y descripciones...
-              </p>
-
               <div class="flex gap-2 justify-center mt-2">
                 <UButton @click="limpiarFiltro" label="Limpiar filtro" color="gray" variant="outline" size="sm" />
                 <UButton @click="applyFilterNow" label="Aplicar ahora" color="primary" variant="solid" size="sm" />
@@ -85,13 +76,11 @@
         </UCollapsible>
       </div>
     </div>
-
-    <!-- TITULO DE LISTA -->
+    <!-- Titulo de Carousel -->
     <h2 class="text-2xl font-bold mt-16 mb-6 text-center lg:text-left">
-      {{ fechaSeleccionada ? `Videos con fechas: ${displayRangeTextShort}` : 'Últimos videos' }}
+      {{ fechaSeleccionada ? `Videos con fechas seleccionadas` : 'Últimos videos' }}
     </h2>
-
-    <!-- Mensajes de estado -->
+    <!-- Estado de carga -->
     <div v-if="loading" class="text-center py-8 text-gray-600">
       Cargando videos...
     </div>
@@ -100,8 +89,7 @@
       <p class="text-sm mt-2">{{ errorMessage }}</p>
       <p class="text-xs text-gray-500 mt-2">Revisa la consola de red (Network) y la consola (Console) para más detalles.</p>
     </div>
-
-    <!-- CARRUSEL PRINCIPAL (videos a mostrar) -->
+    <!-- Carousel Ultimos Videos -->
     <div v-if="!loading && !errorMessage" class="relative">
       <UCarousel
         v-slot="{ item }"
@@ -110,7 +98,7 @@
         :autoplay="videosFavs.length > 0 && !fechaSeleccionada ? { delay: 7000 } : false"
         arrows
         class="w-full mb-10"
-      >
+        >
         <div class="flex flex-col items-center h-full px-2 pb-4">
           <iframe
             v-if="item.videoId"
@@ -140,8 +128,7 @@
           </div>
         </div>
       </UCarousel>
-
-      <!-- MENSAJE DEFAULT -->
+      <!-- Mensaje Default -->
       <div v-if="fechaSeleccionada && videosFiltrados.length === 0" class="text-center py-8 text-gray-500 dark:text-gray-400">
         <UIcon name="i-heroicons-video-camera" class="w-12 h-12 mx-auto mb-4 opacity-50" />
         <p class="text-lg">No hay videos con "{{ displayRangeTextShort }}"</p>
@@ -157,27 +144,24 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
 
 /* VARIABLES BÁSICAS */
-const API_KEY = 'AIzaSyA55uPtx2GjqEDXI_Q5Tb1Bub5sIRbX6kM' // Key para que funcione la API
-const PLAYLIST_ID = 'PL3QddupNykEEVwN8xuFGWr7U1n4St8y_w' // ID de la playlist a consultar
-const MAX_RESULTS = 50 // máximo permitido por la API es 50
-const CACHE_KEY = 'playlistVideos_v2' // clave para localStorage
-const CACHE_TIME_KEY = 'playlistVideosTime_v2' // clave para tiempo de cache
-const CACHE_TTL = 12 * 60 * 60 * 1000 // 12h
+const API_KEY = 'AIzaSyA55uPtx2GjqEDXI_Q5Tb1Bub5sIRbX6kM'
+const PLAYLIST_ID = 'PL3QddupNykEEVwN8xuFGWr7U1n4St8y_w'
+const MAX_RESULTS = 50
+const CACHE_KEY = 'playlistVideos_v2'
+const CACHE_TIME_KEY = 'playlistVideosTime_v2'
+const CACHE_TTL = 12 * 60 * 60 * 1000
 
 /* VARIABLES REACTIVAS */
-const videos = ref([]) // lista completa de videos mapeados
-const videosFavs = ref([]) // lista de videos favoritos
-const selectedRange = ref({ start: null, end: null }) // rango seleccionado en el calendario
-const displaySelectionApplied = ref(false) // si el usuario aplicó el filtro
-const loading = ref(false) // estado de carga
-const errorMessage = ref('') // mensaje de error
+const videos = ref([])
+const videosFavs = ref([])
+const selectedRange = ref({ start: null, end: null })
+const displaySelectionApplied = ref(false)
+const loading = ref(false)
+const errorMessage = ref('')
 
 // MESES 
 const monthNames = [
@@ -200,26 +184,23 @@ function formatForDisplay(obj) {
   return `${day} de ${month} de ${year}`
 }
 
-/* MAPEADO: convierte items de la API a un formato simple */
+/* MAPEADO */
 function mapPlaylistItem(item) {
-  // Prefer contentDetails.videoId si viene (a veces está ahí), sino snippet.resourceId.videoId
   const videoId =
     item?.contentDetails?.videoId ||
     item?.snippet?.resourceId?.videoId ||
-    // en casos raros (otros endpoints) puede estar en item.id.videoId
     item?.id?.videoId ||
     null
-
   return {
     videoId,
     title: item?.snippet?.title || '',
     description: item?.snippet?.description || '',
     publishedAt: item?.snippet?.publishedAt || item?.contentDetails?.videoPublishedAt || null,
-    raw: item // guardar el raw por si lo necesitas
+    raw: item
   }
 }
 
-/* CACHE + FETCH (paginado robusto) */
+/* CACHE + FETCH */
 async function fetchPlaylistVideosWithCache() {
   loading.value = true
   errorMessage.value = ''
@@ -232,38 +213,29 @@ async function fetchPlaylistVideosWithCache() {
       loading.value = false
       return
     }
-
     let nextPageToken = ''
     const all = []
     do {
       const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=${MAX_RESULTS}&playlistId=${PLAYLIST_ID}&key=${API_KEY}${nextPageToken ? `&pageToken=${nextPageToken}` : ''}`
       const res = await fetch(url)
       const data = await res.json()
-      // LOG completo para depuración — revisa la consola (Console) y la pestaña Network
       console.log('YouTube API response page:', { url, data })
-
       if (data.error) {
-        // manejo de errores de la API
         const reason = data.error?.message || JSON.stringify(data.error)
         errorMessage.value = `YouTube API Error: ${reason}`
         loading.value = false
         return
       }
-
       if (data.items && data.items.length > 0) {
-        // mapear y agregar sólo los items con videoId válido
         const mapped = data.items.map(mapPlaylistItem).filter(i => i.videoId)
         all.push(...mapped)
       }
       nextPageToken = data.nextPageToken || ''
     } while (nextPageToken)
-
     if (all.length === 0) {
-      // posible causa: playlist vacía, playlist privada o key inválida/restringida
       errorMessage.value = 'La playlist no contiene videos accesibles o la API key/playlist es privada. Revisa la consola de red.'
     }
-
-    videos.value = all
+    videos.value = all.reverse() // Ordenar de más antiguo a más reciente
     localStorage.setItem(CACHE_KEY, JSON.stringify(all))
     localStorage.setItem(CACHE_TIME_KEY, String(Date.now()))
   } catch(err) {
@@ -282,11 +254,9 @@ function loadFavorites() {
 }
 function saveFavorites() { localStorage.setItem(FAVORITES_KEY, JSON.stringify(videosFavs.value)) }
 function agregarListaFav(item) {
-  // item puede venir ya mapeado (con videoId) o puede ser el raw — soportamos ambos
   const videoId = item.videoId || item?.snippet?.resourceId?.videoId || item?.contentDetails?.videoId || null
   if (!videoId) return
   if (!videosFavs.value.some(v => v.videoId === videoId)) {
-    // guardamos el objeto mapeado para simplificar
     const normalized = item.videoId ? item : mapPlaylistItem(item)
     videosFavs.value.push(normalized)
     saveFavorites()
@@ -297,22 +267,19 @@ function removeFromLiked(videoId) {
   saveFavorites()
 }
 
-/* FILTRADO (usa videos mapeados) */
+/* FILTRADO */
 const videosFiltrados = computed(() => {
   if (!selectedRange.value.start || !selectedRange.value.end) return videos.value
-
   let start = toDate(selectedRange.value.start)
   let end = toDate(selectedRange.value.end)
   if (end < start) [start, end] = [end, start]
   start.setHours(0,0,0,0)
   end.setHours(23,59,59,999)
-
   const months = {
     enero:0,febrero:1,marzo:2,abril:3,
     mayo:4,junio:5,julio:6,agosto:7,
     septiembre:8,setiembre:8,octubre:9,noviembre:10,diciembre:11
   }
-
   return videos.value.filter(v => {
     const t = normalizarTexto(v.title || '')
     const d = normalizarTexto(v.description || '')
@@ -320,7 +287,6 @@ const videosFiltrados = computed(() => {
     let matchT = (v.title || '').match(regex)
     let matchD = (v.description || '').match(regex)
     let videoDate = null
-
     if (matchT) {
       const day = parseInt(matchT[1])
       const month = months[matchT[2].toLowerCase()]
@@ -332,13 +298,21 @@ const videosFiltrados = computed(() => {
       const year = parseInt(matchD[3])
       videoDate = new Date(year, month, day)
     } else return false
-
     return videoDate >= start && videoDate <= end
   })
 })
 
 const displayFilterActive = computed(() => !!selectedRange.value.start)
-const videosAMostrar = computed(() => displayFilterActive.value ? videosFiltrados.value : videos.value)
+
+// MODIFICACIÓN AQUÍ: Mostrar solo primeros 20 videos cuando no hay filtro activo
+const videosAMostrar = computed(() => {
+  if (displayFilterActive.value) {
+    return videosFiltrados.value
+  } else {
+    // Mostrar solo los primeros 20 videos
+    return videos.value.slice(0, 20)
+  }
+})
 
 const fechaSeleccionada = computed(() => !!selectedRange.value.start)
 const displaySingleDateText = computed(() => selectedRange.value.start ? formatForDisplay(selectedRange.value.start) : '')
