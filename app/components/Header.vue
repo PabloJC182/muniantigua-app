@@ -244,6 +244,7 @@
         },
         {
           label: 'Concejo Municipal',
+          to: '/sesiones-concejo',
         },
         {
           label: 'Datos Abiertos',

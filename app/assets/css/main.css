@@ -1,51 +1,51 @@
-@import "tailwindcss";
-@import "@nuxt/ui";
+  @import "tailwindcss";
+  @import "@nuxt/ui";
 
-@theme {
-  --font-causten: "Causten", sans-serif;
-}
-
-:root{
-  --color-muniprim-50: #98E3E1;
-  --color-muniprim-100: #35B0AC;
-  --color-muniprim-200: #1F9995;
-  --color-muniprim-300: #128783;
-  --color-muniprim-400: #097571;
-  --color-muniprim-500: #01615d;
-  --color-muniprim-600: #044D49;
-  --color-muniprim-700: #07403D;
-  --color-muniprim-800: #0A3633;
-  --color-muniprim-900: #0A2927;
-  --color-muniprim-950: #081A18;
-
-  --color-munisec-50: #6196C9;
-  --color-munisec-100: #4378AB;
-  --color-munisec-200: #2D6396;
-  --color-munisec-300: #1B5082;
-  --color-munisec-400: #0F406E;
-  --color-munisec-500: #072e52;
-  --color-munisec-600: #092742;
-  --color-munisec-700: #0D253B;
-  --color-munisec-800: #0E2030;
-  --color-munisec-900: #0F1D29;
-  --color-munisec-950: #0F1921;
-
-  --color-muniverde-500: #00a157;
-
-  --color-muniblanco-500: #ffffff;
-}
-
-.dark {
-  --ui-bg: var(--color-zinc-900);
-  --ui-bg-inverted: var(--color-white);
-}
-
-.text-tiny {
-  font-size: 0.500rem;
-}
-
-@media (min-width: 768px) { 
-  .text-tiny {
-    font-size: 1.3rem;
+  @theme {
+    --font-causten: "Causten", sans-serif;
   }
-}
+
+  :root{
+    --color-muniprim-50: #98E3E1;
+    --color-muniprim-100: #35B0AC;
+    --color-muniprim-200: #1F9995;
+    --color-muniprim-300: #128783;
+    --color-muniprim-400: #097571;
+    --color-muniprim-500: #01615d;
+    --color-muniprim-600: #044D49;
+    --color-muniprim-700: #07403D;
+    --color-muniprim-800: #0A3633;
+    --color-muniprim-900: #0A2927;
+    --color-muniprim-950: #081A18;
+
+    --color-munisec-50: #6196C9;
+    --color-munisec-100: #4378AB;
+    --color-munisec-200: #2D6396;
+    --color-munisec-300: #1B5082;
+    --color-munisec-400: #0F406E;
+    --color-munisec-500: #072e52;
+    --color-munisec-600: #092742;
+    --color-munisec-700: #0D253B;
+    --color-munisec-800: #0E2030;
+    --color-munisec-900: #0F1D29;
+    --color-munisec-950: #0F1921;
+
+    --color-muniverde-500: #00a157;
+
+    --color-muniblanco-500: #ffffff;
+  }
+
+  .dark {
+    --ui-bg: var(--color-zinc-900);
+    --ui-bg-inverted: var(--color-white);
+  }
+
+  .text-tiny {
+    font-size: 0.500rem;
+  }
+
+  @media (min-width: 768px) { 
+    .text-tiny {
+      font-size: 1.3rem;
+    }
+  }
